@@ -30,5 +30,6 @@
         <module>microprofile-fault-tolerance</module>
         <module>microprofile-health</module>
         <module>microprofile-metrics</module>
+        <module>kotlin-rest-http4k</module>
     </modules>
 </project>
