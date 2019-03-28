@@ -7,9 +7,11 @@ class FruitRepository {
 
     private val nextId = AtomicInteger(1)
 
-    fun addFruit(name: String) =
+    fun addFruit(name: String): Fruit =
         Fruit(nextId.getAndIncrement(), name)
                 .also { fruits.add(it) }
 
+    fun getAll() = fruits.sortedBy { it.name }
+    fun getById(id: Int) = fruits.firstOrNull() { it.id == id }
 
 }
