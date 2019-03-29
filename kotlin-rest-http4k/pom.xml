@@ -59,7 +59,12 @@
         <dependency>
             <groupId>org.http4k</groupId>
             <artifactId>http4k-core</artifactId>
-            <version>3.124.0</version>
+            <version>3.127.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.http4k</groupId>
+            <artifactId>http4k-format-jackson</artifactId>
+            <version>3.127.0</version>
         </dependency>
 
         <!-- Testing: -->
