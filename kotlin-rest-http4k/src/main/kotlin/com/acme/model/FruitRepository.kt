@@ -13,5 +13,12 @@ class FruitRepository {
 
     fun getAll() = fruits.sortedBy { it.name }
     fun getById(id: Int) = fruits.firstOrNull() { it.id == id }
+    fun replace(fruit: Fruit) {
+        fruits.replaceAll{if (it.id == fruit.id) fruit else it}
+    }
+
+    fun remove(id: Int) {
+        fruits.removeIf{it.id == id}
+    }
 
 }
