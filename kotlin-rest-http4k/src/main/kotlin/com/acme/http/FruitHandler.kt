@@ -2,6 +2,7 @@ package com.acme.http
 
 import com.acme.model.Fruit
 import com.acme.model.FruitRepository
+import org.http4k.core.HttpHandler
 import org.http4k.core.Method.DELETE
 import org.http4k.core.Method.GET
 import org.http4k.core.Method.POST
@@ -19,37 +20,34 @@ import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.http4k.routing.static
 
-object FruitHandler {
-    private val id = Path.int().of("id")
+private val id = Path.int().of("id")
 
-    operator fun invoke(fruits: FruitRepository) =
-        ServerFilters.CatchLensFailure
-            .then(
-                routes(
-                    "fruits" bind routes(
-                        "/" bind GET to {
-                            Response(OK).body(fruits.getAll().toString())
-                        },
-                        "/" bind POST to {
-                            fruits.addFruit(it.bodyString())
-                            Response(CREATED)
-                        },
-                        "/{id}" bind GET to {
-                            val fruit = fruits.getById(id(it))
-                            Response(OK).body(fruit.toString())
-                        },
-                        "/{id}" bind PUT to {
-                            val fruit = Fruit(id(it), it.bodyString())
-                            fruits.replace(fruit)
+class FruitHandler(fruits: FruitRepository) : HttpHandler by ServerFilters.CatchLensFailure
+    .then(
+        routes(
+            "fruits" bind routes(
+                "/" bind GET to {
+                    Response(OK).body(fruits.getAll().toString())
+                },
+                "/" bind POST to {
+                    fruits.addFruit(it.bodyString())
+                    Response(CREATED)
+                },
+                "/{id}" bind GET to {
+                    val fruit = fruits.getById(id(it))
+                    Response(OK).body(fruit.toString())
+                },
+                "/{id}" bind PUT to {
+                    val fruit = Fruit(id(it), it.bodyString())
+                    fruits.replace(fruit)
 
-                            Response(OK).body(fruit.toString())
-                        },
-                        "/{id}" bind DELETE to {
-                            fruits.remove(id(it))
-                            Response(ACCEPTED)
-                        }
-                    ),
-                    static(Classpath("static"))
-                )
-            )
-}
+                    Response(OK).body(fruit.toString())
+                },
+                "/{id}" bind DELETE to {
+                    fruits.remove(id(it))
+                    Response(ACCEPTED)
+                }
+            ),
+            static(Classpath("static"))
+        )
+    )
