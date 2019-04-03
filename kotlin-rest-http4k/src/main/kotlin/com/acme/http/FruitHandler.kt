@@ -19,10 +19,10 @@ import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.http4k.routing.static
 
-object FruitHandler {
+class FruitHandler(val fruits: FruitRepository) {
     private val id = Path.int().of("id")
 
-    operator fun invoke(fruits: FruitRepository) =
+    fun createHandler() =
         ServerFilters.CatchLensFailure
             .then(
                 routes(
@@ -31,6 +31,7 @@ object FruitHandler {
                             Response(OK).body(fruits.getAll().toString())
                         },
                         "/" bind POST to {
+                            println("!!")
                             fruits.addFruit(it.bodyString())
                             Response(CREATED)
                         },
@@ -49,7 +50,11 @@ object FruitHandler {
                             Response(ACCEPTED)
                         }
                     ),
-                    static(Classpath("static"))
+                    "/" bind GET to {
+                        val resource = FruitHandler::class.java.getResource("/static/index.html")
+                        Response(OK).body(resource.openStream())
+                    }
+//                    static(Classpath("static"))
                 )
             )
 }
