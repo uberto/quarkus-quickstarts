@@ -61,11 +61,6 @@
             <artifactId>http4k-core</artifactId>
             <version>3.127.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.http4k</groupId>
-            <artifactId>http4k-format-jackson</artifactId>
-            <version>3.127.0</version>
-        </dependency>
 
         <!-- Testing: -->
         <dependency>
@@ -132,21 +127,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.jetbrains.kotlin</groupId>
-                        <artifactId>kotlin-maven-allopen</artifactId>
-                        <version>${kotlin.version}</version>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <compilerPlugins>
-                        <plugin>all-open</plugin>
-                    </compilerPlugins>
-                    <pluginOptions>
-                        <option>all-open:annotation=javax.ws.rs.Path</option>
-                    </pluginOptions>
-                </configuration>
             </plugin>
         </plugins>
     </build>
