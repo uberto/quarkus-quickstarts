@@ -17,8 +17,7 @@ import org.http4k.routing.bind
 import org.http4k.routing.path
 import org.http4k.routing.routes
 
-class FruitHandler(val fruits: FruitRepository) {
-//    private val id = Path.int().of("id")
+class FruitHandlerBuilder(val fruits: FruitRepository) {
 
     private fun id(req: Request) = req.path("id")?.toInt() ?: 0
 
@@ -29,9 +28,6 @@ class FruitHandler(val fruits: FruitRepository) {
                     "fruits" bind routes(
                         "/" bind GET to {
                             val fruits = fruits.getAll().toJson()
-                            println("!! ${it.bodyString()}  $fruits")
-
-
                             Response(OK).body(fruits)
                         },
                         "/" bind POST to {
@@ -41,10 +37,10 @@ class FruitHandler(val fruits: FruitRepository) {
                         },
                         "/{id}" bind GET to {
                             val fruit = fruits.getById(id(it))
-                            Response(OK).body(fruit.toString())
+                            Response(OK).body(fruit?.toJson().orEmpty())
                         },
                         "/{id}" bind PUT to {
-                            val fruit = Fruit(id(it), it.bodyString())
+                            val fruit = Fruit(id(it), it.bodyString().getName())
                             fruits.replace(fruit)
 
                             Response(OK).body(fruit.toString())
@@ -55,17 +51,19 @@ class FruitHandler(val fruits: FruitRepository) {
                         }
                     ),
                     "" bind GET to {
-                        val resource = FruitHandler::class.java.getResource("/static/index.html")
+                        val resource = FruitHandlerBuilder::class.java.getResource("/static/index.html")
                         Response(OK).body(resource.openStream())
                     }
 //                    static(Classpath("static"))
                 )
             )
+
 }
 
 private fun List<Fruit>.toJson(): String =
-    "[" +
-    this.map {""" { "id": "${it.id}", "name": "${it.name}" } """ }.joinToString(",") +
-            "]"
+    "[" + this.map {it.toJson()}.joinToString(",") + "]"
+
+private fun Fruit.toJson(): String =
+        """ { "id": "${this.id}", "name": "${this.name}" } """
 
 private fun String.getName(): String = this.substring(9, this.length - 2)

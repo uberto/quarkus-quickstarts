@@ -9,4 +9,3 @@ val fruits = FruitRepository().apply {
     addFruit("Banana")
 }
 
-val fruitsHandler = FruitHandler(fruits).createHandler()
