@@ -6,4 +6,4 @@ import javax.servlet.annotation.WebServlet
 
 
 @WebServlet("/")
-open class RestServlet: Servlet by HttpHandlerServlet(fruitsHandler)
+open class RestServlet: Servlet by HttpHandlerServlet(FruitHandlerBuilder(fruits).createHandler())

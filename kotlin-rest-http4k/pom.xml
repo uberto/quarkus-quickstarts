@@ -29,17 +29,7 @@
     <dependencies>
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-agroal</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
             <artifactId>quarkus-resteasy</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-resteasy-jsonb</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -61,7 +51,6 @@
             <artifactId>http4k-core</artifactId>
             <version>3.127.0</version>
         </dependency>
-
         <!-- Testing: -->
         <dependency>
             <groupId>io.quarkus</groupId>
