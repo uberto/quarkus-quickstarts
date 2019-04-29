@@ -8,7 +8,6 @@ import org.http4k.core.Method.POST
 import org.http4k.core.Method.PUT
 import org.http4k.core.Request
 import org.http4k.core.Response
-import org.http4k.core.Status.Companion.ACCEPTED
 import org.http4k.core.Status.Companion.CREATED
 import org.http4k.core.Status.Companion.NO_CONTENT
 import org.http4k.core.Status.Companion.OK
@@ -17,13 +16,14 @@ import org.http4k.filter.ServerFilters
 import org.http4k.routing.bind
 import org.http4k.routing.path
 import org.http4k.routing.routes
+import java.io.File
 
 class FruitHandlerBuilder(val fruits: FruitRepository) {
 
     private fun id(req: Request) = req.path("id")?.toInt() ?: 0
 
     fun createHandler() =
-        ServerFilters.CatchLensFailure
+        ServerFilters.CatchAll()
             .then(
                 routes(
                     "fruits" bind routes(
@@ -51,11 +51,11 @@ class FruitHandlerBuilder(val fruits: FruitRepository) {
                             Response(NO_CONTENT)
                         }
                     ),
-                    "" bind GET to {
-                        val resource = FruitHandlerBuilder::class.java.getResource("/static/index.html")
-                        Response(OK).body(resource.openStream())
+                    "/" bind GET to {
+                        val asset = File("../../public/static/index.html") //it runs inside target/classes
+                        Response(OK).body(asset.readText())
                     }
-//                    static(Classpath("static"))
+
                 )
             )
 
