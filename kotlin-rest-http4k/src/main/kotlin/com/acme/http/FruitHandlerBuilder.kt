@@ -10,6 +10,7 @@ import org.http4k.core.Request
 import org.http4k.core.Response
 import org.http4k.core.Status.Companion.ACCEPTED
 import org.http4k.core.Status.Companion.CREATED
+import org.http4k.core.Status.Companion.NO_CONTENT
 import org.http4k.core.Status.Companion.OK
 import org.http4k.core.then
 import org.http4k.filter.ServerFilters
@@ -47,7 +48,7 @@ class FruitHandlerBuilder(val fruits: FruitRepository) {
                         },
                         "/{id}" bind DELETE to {
                             fruits.remove(id(it))
-                            Response(ACCEPTED)
+                            Response(NO_CONTENT)
                         }
                     ),
                     "" bind GET to {
