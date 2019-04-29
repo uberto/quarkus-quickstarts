@@ -2,15 +2,19 @@
 
 
 TODO:
- * static page from file for native
  * error page
- * tests
+ * more tests
  * persistence
     
 
 to start in dev mode with hotreplacement:
 
 mvn quarkus:dev
+
+
+to debug in dev mode (attach the process on port 5005)
+
+mvn quarkus:dev -Ddebug
 
 
 to start it without hotreplacement:
