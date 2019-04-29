@@ -5,7 +5,7 @@ TODO:
  * static page from file for native
  * error page
  * tests
- * persistance
+ * persistence
     
 
 to start in dev mode with hotreplacement:
