@@ -6,12 +6,11 @@
     <groupId>org.acme</groupId>
     <artifactId>kotlin-rest-http4k</artifactId>
     <version>1.0-SNAPSHOT</version>
-
     <properties>
-        <quarkus.version>0.12.0</quarkus.version>
+        <surefire-plugin.version>2.22.1</surefire-plugin.version>
+        <quarkus.version>0.14.0</quarkus.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <kotlin.version>1.3.21</kotlin.version>
+        <kotlin.version>1.3.31</kotlin.version>
     </properties>
 
     <dependencyManagement>
@@ -30,14 +29,7 @@
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-resteasy</artifactId>
-            <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-arc</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-kotlin</artifactId>
@@ -83,7 +75,7 @@
             <plugin>
                 <!-- you need this specific version to integrate with the other build helpers -->
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.0</version>
+                <version>${surefire-plugin.version}</version>
             </plugin>
             <plugin>
                 <!-- This is what injects the magic Quarkus bytecode -->
@@ -146,7 +138,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-failsafe-plugin</artifactId>
-                        <version>2.22.1</version>
+                        <version>${surefire-plugin.version}</version>
                         <executions>
                             <execution>
                                 <goals>
