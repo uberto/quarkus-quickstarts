@@ -33,7 +33,8 @@ class FruitHandlerBuilder(val fruits: FruitRepository) {
                         },
                         "/" bind POST to {
                             val fruitName = it.bodyString().getName()
-                            fruits.addFruit(fruitName)
+                            if (!fruitName.isBlank())
+                                fruits.addFruit(fruitName)
                             Response(CREATED)
                         },
                         "/{id}" bind GET to {
