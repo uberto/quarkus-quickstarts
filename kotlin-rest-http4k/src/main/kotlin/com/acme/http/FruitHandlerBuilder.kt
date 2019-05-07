@@ -2,6 +2,9 @@ package com.acme.http
 
 import com.acme.model.Fruit
 import com.acme.model.FruitRepository
+import com.acme.model.toJson
+import com.acme.model.toName
+import io.undertow.Handlers.header
 import org.http4k.core.Method.DELETE
 import org.http4k.core.Method.GET
 import org.http4k.core.Method.POST
@@ -17,6 +20,7 @@ import org.http4k.routing.bind
 import org.http4k.routing.path
 import org.http4k.routing.routes
 import java.io.File
+import javax.ws.rs.core.MediaType
 
 class FruitHandlerBuilder(val fruits: FruitRepository) {
 
@@ -30,9 +34,10 @@ class FruitHandlerBuilder(val fruits: FruitRepository) {
                         "/" bind GET to {
                             val fruits = fruits.getAll().toJson()
                             Response(OK).body(fruits)
+                                    .header("Content-Type", MediaType.APPLICATION_JSON)
                         },
                         "/" bind POST to {
-                            val fruitName = it.bodyString().getName()
+                            val fruitName = it.bodyString().toName()
                             if (!fruitName.isBlank())
                                 fruits.addFruit(fruitName)
                             Response(CREATED)
@@ -40,12 +45,14 @@ class FruitHandlerBuilder(val fruits: FruitRepository) {
                         "/{id}" bind GET to {
                             val fruit = fruits.getById(id(it))
                             Response(OK).body(fruit?.toJson().orEmpty())
+                                    .header("Content-Type", MediaType.APPLICATION_JSON)
                         },
                         "/{id}" bind PUT to {
-                            val fruit = Fruit(id(it), it.bodyString().getName())
+                            val fruit = Fruit(id(it), it.bodyString().toName())
                             fruits.replace(fruit)
 
-                            Response(OK).body(fruit.toString())
+                            Response(OK).body(fruit.toJson())
+                                    .header("Content-Type", MediaType.APPLICATION_JSON)
                         },
                         "/{id}" bind DELETE to {
                             fruits.remove(id(it))
@@ -55,6 +62,7 @@ class FruitHandlerBuilder(val fruits: FruitRepository) {
                     "/" bind GET to {
                         val asset = File("../../public/static/index.html") //it runs inside target/classes
                         Response(OK).body(asset.readText())
+                                .header("Content-Type", MediaType.TEXT_HTML)
                     }
 
                 )
@@ -62,10 +70,3 @@ class FruitHandlerBuilder(val fruits: FruitRepository) {
 
 }
 
-private fun List<Fruit>.toJson(): String =
-    "[" + this.map {it.toJson()}.joinToString(",") + "]"
-
-private fun Fruit.toJson(): String =
-        """ { "id": "${this.id}", "name": "${this.name}" } """
-
-private fun String.getName(): String = this.substring(9, this.length - 2)
